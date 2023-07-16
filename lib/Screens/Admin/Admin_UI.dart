@@ -3,6 +3,8 @@ import '../Admin/collapsible_list.dart';
 import '../Admin/UserManage.dart';
 import '../Login/Login_UI.dart';
 import '../loading/adminload.dart'; // Import the loading screen file
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -25,10 +27,14 @@ class _AdminPageState extends State<AdminPage> {
 
   bool isLoading = true; // Set this flag based on your loading condition
 
+  String currentUser = '';
+  String currentUserEmail = '';
+
   @override
   void initState() {
     super.initState();
     _loadData(); // Call your loading data function
+    fetchCurrentUser();
   }
 
   Future<void> _loadData() async {
@@ -41,13 +47,37 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
+  Future<void> fetchCurrentUser() async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final snapshot = await FirebaseFirestore.instance
+            .collection('admin')
+            .where('email', isEqualTo: currentUser.email)
+            .limit(1)
+            .get();
+
+        if (snapshot.docs.isNotEmpty) {
+          final userData = snapshot.docs[0].data() as Map<String, dynamic>;
+          final username = userData['username'] as String;
+          setState(() {
+            this.currentUser = username;
+            currentUserEmail = currentUser.email ?? '';
+          });
+        }
+      }
+    } catch (error) {
+      print('Error fetching current user: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Admin Page',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(
+        appBarTheme: AppBarTheme(
           color: Colors.white,
         ),
       ),
@@ -104,20 +134,20 @@ class _AdminPageState extends State<AdminPage> {
                                 AssetImage('assets/images/profile-img.png'),
                           ),
                           const SizedBox(width: 10),
-                          const Expanded(
+                          Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Kyle Anthony Nierras",
+                                  currentUser,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 Text(
-                                  "kyleanthony47@gmail.com",
+                                  currentUserEmail,
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w400,

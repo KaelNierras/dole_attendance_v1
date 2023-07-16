@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../Admin/collapsible_list.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../Admin/Admin_UI.dart';
 
 class UserManage extends StatefulWidget {
@@ -19,9 +18,13 @@ class _UserManageState extends State<UserManage> {
 
   late Future<void> _fetchUserDataFuture;
 
+  String currentUser = '';
+  String currentUserEmail = '';
+
   @override
   void initState() {
     super.initState();
+    fetchCurrentUser();
     _fetchUserDataFuture = fetchUserData();
   }
 
@@ -59,19 +62,43 @@ class _UserManageState extends State<UserManage> {
     }
   }
 
+  Future<void> fetchCurrentUser() async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final snapshot = await FirebaseFirestore.instance
+            .collection('admin')
+            .where('email', isEqualTo: currentUser.email)
+            .limit(1)
+            .get();
+
+        if (snapshot.docs.isNotEmpty) {
+          final userData = snapshot.docs[0].data() as Map<String, dynamic>;
+          final username = userData['username'] as String;
+          setState(() {
+            this.currentUser = username;
+            currentUserEmail = currentUser.email ?? '';
+          });
+        }
+      }
+    } catch (error) {
+      print('Error fetching current user: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Admin Page',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(
+        appBarTheme: AppBarTheme(
           color: Colors.white, // Set the color of the AppBar to white
         ),
       ),
       home: Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight),
+          preferredSize: Size.fromHeight(kToolbarHeight),
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: AppBar(
@@ -82,18 +109,18 @@ class _UserManageState extends State<UserManage> {
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new_sharp),
+                      icon: Icon(Icons.arrow_back_ios_new_sharp),
                       color: Colors.black,
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const AdminPage(),
+                            builder: (context) => AdminPage(),
                           ),
                         );
                       },
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Image.asset(
                       'assets/images/Dole2.png',
                       width: 200.0,
@@ -109,7 +136,7 @@ class _UserManageState extends State<UserManage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
+              SizedBox(
                 height: 50,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -126,14 +153,14 @@ class _UserManageState extends State<UserManage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Kyle Anthony Nierras",
+                            currentUser,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           Text(
-                            "kyleanthony47@gmail.com",
+                            currentUserEmail,
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
@@ -145,10 +172,10 @@ class _UserManageState extends State<UserManage> {
                   ],
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 50,
               ),
-              const Column(
+              Column(
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
@@ -162,7 +189,7 @@ class _UserManageState extends State<UserManage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              SizedBox(height: 30),
               // Display loading indicator or data table based on the future status
               FutureBuilder(
                 future: _fetchUserDataFuture,
@@ -179,7 +206,7 @@ class _UserManageState extends State<UserManage> {
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
-                        columns: const [
+                        columns: [
                           DataColumn(label: Text('Username')),
                           DataColumn(label: Text('Email')),
                           DataColumn(label: Text('Gender')),
