@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../SignUp/SignUP_UI.dart';
@@ -6,9 +8,11 @@ import '../Admin/Admin_UI.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
   const LoginPage({Key? key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -58,11 +62,13 @@ class _LoginPageState extends State<LoginPage> {
           final String role = userDoc.get('role');
 
           if (role == 'user') {
+            // ignore: use_build_context_synchronously
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => UserPage()),
+              MaterialPageRoute(builder: (context) => const UserPage()),
             );
           } else {
+            // ignore: use_build_context_synchronously
             showSnackBar(context, 'Invalid Role');
             setState(() {
               isLoading = false;
@@ -75,11 +81,13 @@ class _LoginPageState extends State<LoginPage> {
           final String role = adminDoc.get('role');
 
           if (role == 'admin') {
+            // ignore: use_build_context_synchronously
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminPage()),
+              MaterialPageRoute(builder: (context) => const AdminPage()),
             );
           } else {
+            // ignore: use_build_context_synchronously
             showSnackBar(context, 'Invalid Role');
             setState(() {
               isLoading = false;
@@ -124,13 +132,13 @@ class _LoginPageState extends State<LoginPage> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20.0),
             topRight: Radius.circular(20.0),
           ),
           child: Container(
             padding: const EdgeInsets.all(16.0),
-            color: Color.fromARGB(
+            color: const Color.fromARGB(
                 255, 255, 255, 255), // Set the desired background color
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -178,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
       SnackBar(
         content: Text(
           message,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
           textAlign: TextAlign.center,
         ),
         backgroundColor: Colors.red,
@@ -237,7 +245,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20.0),
               TextField(
                 controller: _emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Email',
                   prefixIcon: Icon(Icons.email),
                 ),
@@ -245,7 +253,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 10.0),
               TextField(
                 controller: _passwordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Password',
                   prefixIcon: Icon(Icons.lock),
                 ),

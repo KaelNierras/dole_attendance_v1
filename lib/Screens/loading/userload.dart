@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoadingScreen extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   const LoadingScreen({Key? key});
 
   @override

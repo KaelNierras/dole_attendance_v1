@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../loading/userload.dart';
@@ -5,9 +7,10 @@ import '../User/collapsible_list.dart';
 import '../Login/Login_UI.dart';
 
 class UserPage extends StatefulWidget {
-  UserPage({Key? key}) : super(key: key);
+  const UserPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _UserPageState createState() => _UserPageState();
 }
 
@@ -38,16 +41,13 @@ class _UserPageState extends State<UserPage> {
     });
   }
 
-  Future<void> _simulateLoading() async {
-    await Future.delayed(Duration(seconds: 2)); // Adjust the duration as needed
-  }
-
   void _signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     print('Successfully Logged Out');
+    // ignore: use_build_context_synchronously
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
+      MaterialPageRoute(builder: (context) => const LoginPage()),
       (route) => false,
     );
   }
@@ -55,9 +55,9 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return LoadingScreen();
+      return const LoadingScreen();
     } else if (_user == null) {
-      return LoginPage();
+      return const LoginPage();
     } else {
       return MaterialApp(
         title: 'Admin Page',

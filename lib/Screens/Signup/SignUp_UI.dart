@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, avoid_print
+
 import 'package:flutter/material.dart';
 import '../Login/Login_UI.dart';
 import '../Signup/SignUp_UIAdmin.dart';
@@ -5,9 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUp extends StatefulWidget {
-  SignUp({Key? key}) : super(key: key);
+  const SignUp({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _SignUpState createState() => _SignUpState();
 }
 
@@ -29,7 +32,7 @@ class _SignUpState extends State<SignUp> {
     final snackBar = SnackBar(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       elevation: 0,
-      backgroundColor: Color.fromARGB(0, 160, 11, 0),
+      backgroundColor: const Color.fromARGB(0, 160, 11, 0),
       content: ClipRRect(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(10.0),
@@ -49,6 +52,7 @@ class _SignUpState extends State<SignUp> {
       ),
     );
 
+    // ignore: avoid_single_cascade_in_expression_statements
     ScaffoldMessenger.of(context).showSnackBar(snackBar)
       ..closed.then((value) {
         // Reset the flag when snack bar is closed
@@ -119,9 +123,10 @@ class _SignUpState extends State<SignUp> {
         print('QR code document added successfully with ID: ${qrCodeDoc.id}');
 
         // Navigate to the login page
+        // ignore: use_build_context_synchronously
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
+          MaterialPageRoute(builder: (context) => const LoginPage()),
         );
       } catch (error) {
         print('Error adding document: $error');
@@ -279,7 +284,8 @@ class _SignUpState extends State<SignUp> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()),
                       );
                     },
                     child: const Text(
@@ -310,7 +316,8 @@ class _SignUpState extends State<SignUp> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SignUpAdmin()),
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpAdmin()),
                       );
                     },
                     child: const Text(

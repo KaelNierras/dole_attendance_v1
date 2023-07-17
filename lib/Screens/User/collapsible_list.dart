@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 class CollapsibleList extends StatefulWidget {
   final List<Item> items;
 
-  const CollapsibleList({required this.items});
+  const CollapsibleList({super.key, required this.items});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CollapsibleListState createState() => _CollapsibleListState();
 }
 
@@ -36,7 +37,7 @@ class _CollapsibleListState extends State<CollapsibleList> {
             return ListTile(
               title: Text(
                 item.headerValue,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w900,
                 ),
