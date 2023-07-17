@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, prefer_const_constructors_in_immutables, library_private_types_in_public_api, avoid_print,  prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,6 +37,7 @@ class _UserManageState extends State<UserManage> {
 
       print('Data count: ${snapshot.docs.length}'); // Debug statement
 
+      // ignore: avoid_function_literals_in_foreach_calls
       snapshot.docs.forEach((doc) {
         final userData = doc.data() as Map<String, dynamic>;
         final username = userData['username'] as String;
@@ -73,6 +76,7 @@ class _UserManageState extends State<UserManage> {
             .get();
 
         if (snapshot.docs.isNotEmpty) {
+          // ignore: unnecessary_cast
           final userData = snapshot.docs[0].data() as Map<String, dynamic>;
           final username = userData['username'] as String;
           setState(() {
@@ -92,13 +96,13 @@ class _UserManageState extends State<UserManage> {
       title: 'Admin Page',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           color: Colors.white, // Set the color of the AppBar to white
         ),
       ),
       home: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight),
+          preferredSize: const Size.fromHeight(kToolbarHeight),
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: AppBar(
@@ -109,18 +113,18 @@ class _UserManageState extends State<UserManage> {
                 child: Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.arrow_back_ios_new_sharp),
+                      icon: const Icon(Icons.arrow_back_ios_new_sharp),
                       color: Colors.black,
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AdminPage(),
+                            builder: (context) => const AdminPage(),
                           ),
                         );
                       },
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Image.asset(
                       'assets/images/Dole2.png',
                       width: 200.0,
@@ -141,12 +145,12 @@ class _UserManageState extends State<UserManage> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 30,
                       backgroundImage:
                           AssetImage('assets/images/profile-img.png'),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -154,14 +158,14 @@ class _UserManageState extends State<UserManage> {
                         children: [
                           Text(
                             currentUser,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           Text(
                             currentUserEmail,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                             ),
@@ -172,10 +176,10 @@ class _UserManageState extends State<UserManage> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
-              Column(
+              const Column(
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
@@ -189,17 +193,17 @@ class _UserManageState extends State<UserManage> {
                   ),
                 ],
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               // Display loading indicator or data table based on the future status
               FutureBuilder(
                 future: _fetchUserDataFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   } else if (snapshot.hasError) {
-                    return Center(
+                    return const Center(
                       child: Text('Error fetching user data'),
                     );
                   } else {
@@ -207,10 +211,10 @@ class _UserManageState extends State<UserManage> {
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
                         columns: [
-                          DataColumn(label: Text('Username')),
-                          DataColumn(label: Text('Email')),
-                          DataColumn(label: Text('Gender')),
-                          DataColumn(label: Text('Address')),
+                          const DataColumn(label: Text('Username')),
+                          const DataColumn(label: Text('Email')),
+                          const DataColumn(label: Text('Gender')),
+                          const DataColumn(label: Text('Address')),
                         ],
                         rows: List<DataRow>.generate(
                           usernames.length,

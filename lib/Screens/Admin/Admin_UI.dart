@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, library_private_types_in_public_api, avoid_print
+
 import 'package:flutter/material.dart';
 import '../Admin/collapsible_list.dart';
 import '../Admin/UserManage.dart';
@@ -39,7 +41,7 @@ class _AdminPageState extends State<AdminPage> {
 
   Future<void> _loadData() async {
     // Simulating loading data process
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
 
     // Update the loading state
     setState(() {
@@ -58,6 +60,7 @@ class _AdminPageState extends State<AdminPage> {
             .get();
 
         if (snapshot.docs.isNotEmpty) {
+          // ignore: unnecessary_cast
           final userData = snapshot.docs[0].data() as Map<String, dynamic>;
           final username = userData['username'] as String;
           setState(() {
@@ -77,12 +80,12 @@ class _AdminPageState extends State<AdminPage> {
       title: 'Admin Page',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           color: Colors.white,
         ),
       ),
       home: isLoading
-          ? LoadingScreen() // Display the loading screen if isLoading is true
+          ? const LoadingScreen() // Display the loading screen if isLoading is true
           : Scaffold(
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -141,14 +144,14 @@ class _AdminPageState extends State<AdminPage> {
                               children: [
                                 Text(
                                   currentUser,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 Text(
                                   currentUserEmail,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w400,
                                   ),
